@@ -10,6 +10,7 @@ angular.module('confusionApp')
 
   $scope.dishes = menuFactory.getDishes();
 
+
   $scope.select = function (setTab) {
     $scope.tab = setTab;
 
@@ -82,42 +83,53 @@ angular.module('confusionApp')
         }])
 
 .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function ($scope, $stateParams, menuFactory) {
-  var dish = menuFactory.getDish(parseInt($stateParams.id, 10));
-  $scope.dish = dish;
-                    }])
 
+  var dish = menuFactory.getDish(parseInt($stateParams.id, 10));
+
+  $scope.dish = dish;
+
+        }])
 
 .controller('DishCommentController', ['$scope', function ($scope) {
-  $scope.newPreviewComment = function () {
-    return {
+
+  $scope.mycomment = {
+    rating: 5,
+    comment: "",
+    author: "",
+    date: ""
+  };
+
+  $scope.submitComment = function () {
+
+    $scope.mycomment.date = new Date().toISOString();
+    console.log($scope.mycomment);
+
+    $scope.dish.comments.push($scope.mycomment);
+
+    $scope.commentForm.$setPristine();
+
+    $scope.mycomment = {
       rating: 5,
       comment: "",
       author: "",
       date: ""
     };
   };
+        }])
 
-  //Step 1: Create a JavaScript object to hold the comment from the form
-  $scope.previewComment = $scope.newPreviewComment();
+// implement the IndexController and About Controller here
 
-  $scope.ratings = [1, 2, 3, 4, 5];
+.controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', function ($scope, menuFactory, corporateFactory) {
 
-  $scope.submitComment = function () {
+  $scope.dish = menuFactory.getDish(0);
+  $scope.promotion = menuFactory.getPromotion(0);
+  $scope.leader = corporateFactory.getLeader(3);
 
-    console.log($scope.previewComment);
-    //Step 2: This is how you record the date
-    $scope.previewComment.date = new Date().toISOString();
-    console.log($scope.previewComment);
+        }])
 
-    // Step 3: Push your comment into the dish's comment array
-    $scope.dish.comments.push($scope.previewComment);
+.controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
 
-    //Step 4: reset your form to pristine
-    $scope.commentForm.$setPristine();
+  $scope.leaders = corporateFactory.getLeaders();
 
-    //Step 5: reset your JavaScript object that holds your comment
-    $scope.previewComment = $scope.newPreviewComment();
-  };
-}])
-
+        }])
 ;
