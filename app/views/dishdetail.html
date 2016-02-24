@@ -1,6 +1,9 @@
 <div class="container" ng-controller="DishDetailController">
   <div class="row row-content" ng-controller="DishCommentController">
-    <div class="col-xs-12">
+    <div class="col-xs-12" ng-if="!showDish">
+      <h3>{{message}}</h3>
+    </div>
+    <div class="col-xs-12" ng-if="showDish">
       <button class="btn btn-xs btn-primary pull-right" type="button" ui-sref="app.menu">
         Back to Menu
       </button>
@@ -20,12 +23,12 @@
     </div>
     <div class="col-xs-9 col-xs-offset-1">
       <p><strong>Customer Comments</strong>&nbsp;&nbsp;&nbsp; Sort by:&nbsp;
-        <input type="text" ng-model="sortText">
+        <input type="text" ng-model="orderText">
       </p>
     </div>
     <div class="col-xs-9 col-xs-offset-1">
       <ul style="list-style-type: none;padding:0; margin:0;">
-        <li ng-repeat="comment in dish.comments | orderBy:sortText">
+        <li ng-repeat="comment in dish.comments | orderBy:orderText">
           <blockquote>
             <p>{{comment.rating}} Stars</p>
             <p>{{comment.comment}}</p>
@@ -35,9 +38,9 @@
         </li>
         <li ng-show="commentForm.$dirty && commentForm.$valid">
           <blockquote>
-            <p>{{previewComment.rating}} Stars</p>
-            <p>{{previewComment.comment}}</p>
-            <footer>{{previewComment.author}},
+            <p>{{mycomment.rating}} Stars</p>
+            <p>{{mycomment.comment}}</p>
+            <footer>{{mycomment.author}},
             </footer>
           </blockquote>
         </li>
@@ -49,7 +52,7 @@
         <div class="form-group" ng-class="{ 'has-error' : commentForm.author.$error.required && !commentForm.author.$pristine }">
           <label for="author" class="col-sm-2 control-label">Your Name</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="author" name="author" placeholder="Enter Your Name" ng-model="previewComment.author" required>
+            <input type="text" class="form-control" id="author" name="author" placeholder="Enter Your Name" ng-model="mycomment.author" required>
             <span ng-show="commentForm.author.$error.required && !commentForm.author.$pristine" class="help-block">Your name is required.</span>
           </div>
         </div>
@@ -58,14 +61,14 @@
           <div class="col-sm-10">
             <div class="radio-inline" ng-repeat="rating in ratings">
               <label>
-                <input type="radio" name="ratings" ng-model="previewComment.rating" ng-value="rating">{{rating}}</label>
+                <input type="radio" name="ratings" ng-model="mycomment.rating" ng-value="rating">{{rating}}</label>
             </div>
           </div>
         </div>
         <div class="form-group" ng-class="{ 'has-error' : commentForm.comment.$error.required && !commentForm.comment.$pristine }">
           <label for="feedback" class="col-sm-2 control-label">Your Comments</label>
           <div class="col-sm-10">
-            <textarea class="form-control" id="comment" name="comment" rows="12" ng-model="previewComment.comment" required></textarea>
+            <textarea class="form-control" id="comment" name="comment" rows="12" ng-model="mycomment.comment" required></textarea>
             <span ng-show="commentForm.comment.$error.required && !commentForm.comment.$pristine" class="help-block">Your comments are required.</span>
           </div>
         </div>
